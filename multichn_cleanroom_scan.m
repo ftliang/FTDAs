@@ -1,13 +1,13 @@
 % author:FT.Liang
 % data:2018/05/11
 % version:1.1
-% filename:34470A¶ÁÊı¾İ
-% describe:34470A¶ÁÊı¾İ
-%% ÇåÀíÊı¾İ
+% filename:34470Aè¯»æ•°æ®
+% describe:34470Aè¯»æ•°æ®
+%% æ¸…ç†æ•°æ®
  close all;
  clear; 
  clc;
-%% ¸ß¾«¶ÈDAC²Ù×÷
+%% é«˜ç²¾åº¦DACæ“ä½œ
 dac_ip='10.0.200.2';
 dac = FTDAs(dac_ip);
 dac.SetValue(1,-524288);%Value must be in [-524288 - offset_zero,524287 - offset_zero)
@@ -15,7 +15,7 @@ dac.SetValue(2,524287);%Value must be in [-524288 - offset_zero,524287 - offset_
 dac.SetValue(3,0);%Value must be in [-524288 - offset_zero,524287 - offset_zero)
 dac.SetValue(4,0);%Value must be in [-524288 - offset_zero,524287 - offset_zero)
 
-%% ÉèÖÃºÍ´ò¿ªÉè±¸
+%% è®¾ç½®å’Œæ‰“å¼€è®¾å¤‡
 dmma_ip='10.89.5.149';
 dmma = DMM34465A(dmma_ip);
 dmma.Open();
@@ -23,9 +23,9 @@ dmma.Open();
 % dmmb_ip='10.0.254.8';
 % dmmb = DMM34465A(dmmb_ip);
 % dmmb.Open();
-%% Êı¾İ³õÊ¼»¯
+%% æ•°æ®åˆå§‹åŒ–
 SUM_TIME=30000;%in hour
-eachtime=100;%ÂÖÑµÊı¾İ²âÊÔ
+eachtime=100;%è½®è®­æ•°æ®æµ‹è¯•
 times=SUM_TIME*eachtime;
 results_a = zeros(1,times);
 results_b = zeros(1,times);
@@ -35,7 +35,7 @@ figure;
 %plot(time_counts, dmm_value, 'r.', 'MarkerSize', 6);
 hold on;
 
-%% Êµ¼ÊÔËĞĞ¶Î
+%% å®é™…è¿è¡Œæ®µ
 t0= datenum(datestr(now,0));
 time_arr = repmat(t0, times, 1);
 
@@ -75,7 +75,7 @@ toc
 end
 end
 toc
- %% µ¥¶À»æÍ¼²é¿´
+ %% å•ç‹¬ç»˜å›¾æŸ¥çœ‹
 time_offset=1;
 time_counts = 300000;
 subplot(2,1,1);
@@ -85,11 +85,11 @@ subplot(2,1,2);
 plot(time_arr(time_offset:1: time_counts-1), results_b(time_offset:1: time_counts-1), 'r.', 'MarkerSize', 6);
 datetick('x',0);
 drawnow;
-%% µ¥¶À±£´æ£¬×¢ÒâÎÄ¼şÃû
+%% å•ç‹¬ä¿å­˜ï¼Œæ³¨æ„æ–‡ä»¶å
     save __tmp_a results_a;
     save __tmp_b results_b;
     save __tmp_time_arr time_arr;
                                 
-%% ÒÇ±íÉè±¸¹Ø±Õ
+%% ä»ªè¡¨è®¾å¤‡å…³é—­
 dmma.Close;
 dmmb.Close;

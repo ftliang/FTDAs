@@ -1,7 +1,7 @@
 function data = parsestr(datastr)
-%PARSESTR ½âÎö°ËÎ»°ëÍòÓÃ±í·µ»ØµÄ×Ö·û´®Êı¾İ
-%   --DATASTR ÊäÈë×Ö·û´®
-%   --DATA ×Ö·û´®½âÎö½á¹û
+%PARSESTR è§£æå…«ä½åŠä¸‡ç”¨è¡¨è¿”å›çš„å­—ç¬¦ä¸²æ•°æ®
+%   --DATASTR è¾“å…¥å­—ç¬¦ä¸²
+%   --DATA å­—ç¬¦ä¸²è§£æç»“æœ
     strarray = regexp(datastr,'E');
     len = length(strarray);
     data = zeros(1,len);

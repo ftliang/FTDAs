@@ -2,7 +2,7 @@
 % data:2017/1/3
 % version:1.0
 % filename:DMM34465A.m
-% describe:万用表类
+% describe:涓囩敤琛ㄧ被
 classdef DMM34465A < handle
     
     properties

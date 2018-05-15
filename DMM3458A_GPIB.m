@@ -2,7 +2,7 @@
 % data:2017/1/3
 % version:1.0
 % filename:DMM3458A_GPIB.m
-% describe:ÍòÓÃ±íÀà
+% describe:ä¸‡ç”¨è¡¨ç±»
 classdef DMM3458A_GPIB < handle
     
     properties
@@ -37,7 +37,7 @@ classdef DMM3458A_GPIB < handle
 %fprintf (obj.dmm,'ohm 100');
             fprintf (obj.dmm,'tarm hold');
             fprintf (obj.dmm,'trig auto');
-            fprintf (obj.dmm,'nplc 10');%ÓënplcÏà¶ÔµÄÊ±¼ä
+            fprintf (obj.dmm,'nplc 10');%ä¸nplcç›¸å¯¹çš„æ—¶é—´
             fprintf (obj.dmm,'mem off'); %clears any previous data in memory and sets for fifo operation
             fprintf (obj.dmm,'end on');  %sets up the correct EOL, use end always if memory off
             fprintf (obj.dmm,'ndig 9');
@@ -63,7 +63,7 @@ classdef DMM3458A_GPIB < handle
 %                 scaledreadings = scale*data;  %multiply data by scaling factor
         end
         
-        function result = measure_count(obj,count)%Êı¾İ»á±»Á¬ÆğÀ´£¬ÓĞ½âÎöbugÔİ²»Ê¹ÓÃ
+        function result = measure_count(obj,count)%æ•°æ®ä¼šè¢«è¿èµ·æ¥ï¼Œæœ‰è§£æbugæš‚ä¸ä½¿ç”¨
 
                 fprintf (obj.dmm,'nrdgs %d,auto',count);
                 fprintf (obj.dmm,'tarm sgl'); %Arm the instrument once
