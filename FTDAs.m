@@ -1,51 +1,85 @@
 % author:F.Liang
-% data/version:18.0503
+% data/version:18.0711
 % filename:FTDAs.m
-% describe:æ¢ç¦ç”°å®šåˆ¶æ¬¾é«˜ç²¾åº¦DCæºæ“ä½œç±»ï¼Œå°è£…ç‰ˆï¼Œæ¯æ¬¡è¯»å†™è¿›è¡Œå¼€å…³tcpè¿žæŽ¥ã€‚
-% ç›®å‰DAå·¥ä½œåœ¨tcpip serveræ¨¡å¼ï¼ŒæŽ¥å—çš„æŒ‡ä»¤å½¢å¼åªæœ‰ä¸€ç§ï¼Œå­—ç¬¦ä¸²ç±»åž‹'DA=1;RW=1;ADDR=0x01;VAL=0x00000;'
-% DA=(1,2,3,4);RW=(1W,0R);ADDR=0x(01,02,03,04);VAL=0x(00000~FFFFF);
-% DAæœ‰4ä¸ªé€šé“ï¼Œè®¾å¤‡ä¸Šæ¯ä¸ªé€šé“å¯¹åº”ä¸€å¯¹äº’è¡¥åå‘è¾“å‡ºï¼ŒåŽŸåˆ™ä¸Šæ­£ç«¯è¾“å‡ºçš„ç¨³å®šæ€§ä¼šè¾ƒè´Ÿç«¯è¾“å‡ºå¥½ï¼Œå› ä¸ºè´Ÿç«¯æœ‰å¤–éƒ¨ç½‘ç»œç”µé˜»ç‹¬ç«‹å…ƒä»¶ï¼Œå¯èƒ½å½±å“æ€§èƒ½ã€‚
-% DAåœ¨æŽ¥å—RW=1;çš„å†™æ“ä½œæ—¶ï¼Œæ²¡æœ‰ä»»ä½•è¿”å›žå€¼ï¼Œåœ¨æŽ¥å—RW=0;æ—¶ï¼Œç›´æŽ¥è¿”å›žä»ŽDACæŒ‡å®šé€šé“éƒ½å›žæ¥çš„ç”µåŽ‹è®¾ç½®å€¼ã€‚è¿”å›žæ•°æ®å½¢å¼ä¸ºå­—ç¬¦ä¸²'0x00000\n'?ç»“æŸç¬¦å¯åŽæœŸè°ƒæ•´ç¡¬ä»¶ä¿®æ”¹ä»¥é…åˆè½¯ä»¶è®¾è®¡ã€‚
-% RW=0æ—¶ï¼ŒVALæ— æ„ä¹‰ï¼Œä½†è¿˜æ˜¯æŒ‰è§„èŒƒæ ¼å¼å¸¦è¿›åŽ»ï¼Œå¯ä»¥ä¼ é€’0è¿›å…¥ã€‚
-% ADDRå¸¸è§„ç”¨æˆ·åªä½¿ç”¨01ï¼Œå…¶ä»–åœ°å€ä¸ºDACå…¶ä»–åŠŸèƒ½è®¾ç½®åž‹å¯„å­˜å™¨ï¼Œåªå¯¹é«˜çº§ç”¨æˆ·ä½¿ç”¨ï¼Œæ‰€ä»¥å¸¸è§„è¯»å†™å‡½æ•°ä¸éœ€è¦ç”¨æˆ·æä¾›åœ°å€ä¿¡æ¯ï¼Œå‡½æ•°å†…å†™æ­»ã€‚
-% VALä¸ºç”µåŽ‹è®¾ç½®å€¼ï¼Œ20bitäºŒè¿›åˆ¶ç ï¼Œ0x00000æœ€å°ï¼Œå¯¹åº”è¾“å‡ºèŒƒå›´æœ‰å¯èƒ½æ˜¯-2V~+2Vï¼Œ-3.5V~+3.5Vï¼Œ-7V~+7Vï¼Œè§†ç”µè·¯ç›´æŽ¥é…ç½®æƒ…å†µï¼ˆä¸èƒ½éšæ„è°ƒèŠ‚ï¼Œéœ€è¦å¼€å¯†å°ç›–ï¼‰ï¼Œç›®å‰ç‰ˆæœ¬ä¸º-7V~+7V
-% éƒ¨åˆ†è®¾å¤‡å¯èƒ½é‡‡ç”¨18bitDACï¼Œè®¾ç½®å€¼å½¢å¼ä¸å˜ï¼Œä¼ 20bitåˆ°DACï¼Œåªæ˜¯æœ€ä½Žä¸¤bitæ— æ„ä¹‰ã€‚ç›®å‰ç‰ˆæœ¬ä¸º20bitã€‚
-% ä½¿ç”¨èŒƒä¾‹ï¼š
-% dac_ip='10.0.200.1';
-% dac = FTDAs(dac_ip);
+% describe:Áº¸£Ìï¶¨ÖÆ¿î¸ß¾«¶ÈDCÔ´²Ù×÷Àà£¬·â×°°æ£¬Ã¿´Î¶ÁÐ´½øÐÐ¿ª¹ØtcpÁ¬½Ó¡£
+% Ð´¸øDCÔ´µÄÊý¾ÝÊÇ×îµ×²ãµÄ»ù´¡Êý¾Ý£¬¶øÓÃ»§ÊäÈëµÄÊý¾ÝÊÇÎïÀí²ãÃæµÄ±äÁ¿£¬Á½ÕßÐèÒªÔÚÈí¼þ²ã½øÐÐ×ª»»¡£
+% Ä¿Ç°DA¹¤×÷ÔÚtcpip serverÄ£Ê½£¬½ÓÊÜµÄÖ¸ÁîÎª´¿ASIC×Ö·û´®£¬×Ö·û´®¸ñÊ½ÀàËÆ'DA=1;RW=1;ADDR=0x01;VAL=0x00000;'
+% DA=(1,2,3,4);RW=(1/W,0/R);ADDR=0x(01,02,03,04);VAL=0x(00000~FFFFF)£¨ÉèÖÃÖµ¹Ì¶¨¿í¶È£¬±ØÐëÐ´Âú5Î»£©;
+% DAÓÐ4¸öÍ¨µÀ£¬ÉèÖÃÔ½½çÒªÌáÇ°´¦Àí¡££¨Éè±¸ÉÏÃ¿¸öÍ¨µÀ¶ÔÓ¦Ò»¶Ô»¥²¹·´ÏòÊä³ö£¬Ô­ÔòÉÏÕý¶ËÊä³öµÄÎÈ¶¨ÐÔ»á½Ï¸º¶ËÊä³öºÃ£¬ÒòÎª¸º¶ËÓÐÍâ²¿ÍøÂçµç×è¶ÀÁ¢Ôª¼þ£¬¿ÉÄÜÓ°ÏìÐÔÄÜ¡££©
+% DAÔÚ½ÓÊÜRW=1;µÄÐ´²Ù×÷Ê±£¬Ã»ÓÐÈÎºÎ·µ»ØÖµ£¬ÔÚ½ÓÊÜRW=0;Ê±£¬Ö±½Ó·µ»Ø´ÓDACÖ¸¶¨Í¨µÀ¶¼»ØÀ´µÄµçÑ¹ÉèÖÃÖµ¡£·µ»ØÊý¾ÝÐÎÊ½Îª×Ö·û´®'0x00000\n'ÆäÖÐ\nÊÇ×Ö·û´®½áÊø·û£¬matlabÀïÃæÅÐ¶Ï¸Ä×Ö·ûºó½áÊø½ÓÊÜ¡£Èç¹ûÊ®·Ö±ØÒª£¬½áÊø·û¿ÉºóÆÚµ÷ÕûÓ²¼þÐÞ¸ÄÒÔÅäºÏÈí¼þÉè¼Æ¡£
+% RW=0Ê±£¬VALÎÞÒâÒå£¬µ«»¹ÊÇ°´¹æ·¶¸ñÊ½´ø½øÈ¥£¬¿ÉÒÔ´«µÝ0½øÈë¡£
+% ADDR³£¹æÓÃ»§Ö»Ê¹ÓÃ01£¬ÆäËûµØÖ·ÎªDACÆäËû¹¦ÄÜÉèÖÃÐÍ¼Ä´æÆ÷£¬Ö»¶Ô¸ß¼¶ÓÃ»§Ê¹ÓÃ£¬ËùÒÔ³£¹æ¶ÁÐ´º¯Êý²»ÐèÒªÓÃ»§Ìá¹©µØÖ·ÐÅÏ¢£¬º¯ÊýÄÚÐ´ËÀ¡£
+% VALÎªµçÑ¹ÉèÖÃÖµ£¬20bit¶þ½øÖÆÂë£¬0x00000×îÐ¡£¬¶ÔÓ¦Êä³ö·¶Î§-7V~+7V¡£
+% 
+% Ê¹ÓÃ·¶Àý£¨ÓÃ»§¼¶£©£º
+% dac_ip='10.0.200.1'; %¶¨ÒåÒ»¸öDCÔ´IP
+% dac = FTDAs(dac_ip); %³õÊ¼»¯
+% ±ØÒªµÄº¯ÊýÄÚ²¿²ÎÁ¿¸³Öµ£¬ÓÈÆäÖ¸offset£¬¼´0Æ«²î£¬ÒÔºó¿ÉÄÜ»áÓÐ»ù×¼Êý¾Ý¿â¶ÁÈë¸ÃÊý¾Ý¡£
 % dac.SetValue(1,-524288);%Value must be in [-524288 - offset_zero,524287 - offset_zero)
-% dac.ReadValue(1,0);
-%ä¸éœ€è¦è¿›è¡Œå¼€å…³tcpè¿žæŽ¥ï¼Œæœ¬ä»£ç å†…éƒ¨è‡ªè¡Œç»´æŠ¤ï¼Œcpuå†…è®¾è®¡ä¸ºå®Œæˆä¸€æ¬¡æ•°æ®æŽ¥æ”¶åŽä¸»åŠ¨å…³é—­tcpé“¾æŽ¥ï¼Œè½¯ä»¶ä¹Ÿéœ€è¦é…åˆå…³é—­é“¾æŽ¥ã€‚ä½¿ç”¨æ—¶æ³¨æ„ä¿è¯tcpé“¾æŽ¥çš„å¿«é€Ÿå¼€å…³ï¼Œæˆå¯¹å‡ºçŽ°ã€‚
-%åŽŸåˆ™ä¸Šå¤šè®¾å¤‡æ“ä½œä¹Ÿä¸å†²çª(è¦å°å¿ƒ)ï¼Œè®¾ç½®å€¼ä»¥æœ€åŽä¸€æ¬¡ä¸ºå‡†ã€‚
+% dac.ReadValue(1,0); %Èç¹ûÓÃ»§Íü¼ÇÉèÖÃÖµ£¬¿ÉÒÔ½øÐÐ¶Á³ö¡£Èç¹û²»±ØÒª¶Á³ö£¬ÉÏÃæµÄSetValue²Ù×÷¾ÍÍê³ÉÁËËùÓÐ¶¯×÷¡£
+%²»ÐèÒª½øÐÐ¿ª¹ØtcpÁ¬½Ó£¬±¾´úÂëÄÚ²¿×ÔÐÐÎ¬»¤£¬Éè±¸¶ËcpuÄÚÉè¼ÆÎªÍê³ÉÒ»´ÎÊý¾Ý½ÓÊÕºóÖ÷¶¯¹Ø±ÕtcpÁ´½Ó£¬Èí¼þÒ²ÐèÒªÅäºÏ¹Ø±ÕÁ´½Ó¡£Ê¹ÓÃÊ±×¢Òâ±£Ö¤tcpÁ´½ÓµÄ¿ìËÙ¿ª¹Ø£¬³É¶Ô³öÏÖ£¬µ«Ò²Òª×¢Òâ¿ª¹ØµÄÆµÂÊ/Ê±¼ä¼ä¸ô£¬²âÊÔÊ±³öÏÖ¹ý¹Ø±ÕºóÁ¢¿Ì´ò¿ª£¬Ê±¼äÐ¡ÓÚ0.2sÊ±£¬Éè±¸¶ËÏìÓ¦Ê§°Ü¡£
+%Ô­ÔòÉÏ¶àÉè±¸²Ù×÷Ò²²»³åÍ»(ÒªÐ¡ÐÄ)£¬ÉèÖÃÖµÒÔ×îºóÒ»´ÎÎª×¼¡£
+%¸üÐÂËµÃ÷£º
+%V18.0521£¬¸üÐÂ×¢ÊÍ¼°ËµÃ÷£¬ÓÃÓÚÈí¼þ×é¿ª·¢¡£
+%V18.0602£¬Ìí¼ÓReadTMÎÂ¶È¶ÁÈ¡º¯Êý¡£ÐèÒª¸üÐÂÉè±¸¹Ì¼þ£¬Á¬½Ó´«¸ÐÆ÷£¬²âÊÔ½×¶Î¡£
+%V18.0613£¬¸¨ÖúÐÔ´úÂë£¬ÉèÖÃ³ö´íÊ±»ã±¨³ö´íÉèÖÃÖµ¡£ÐÞ¸ÄÁËReadValueÊäÈë²ÎÊý
+%V18.0627,ÐÞ¸Ä³ö´íÖØ¶Á³¢ÊÔ´ÎÊýÏÞÖÆ£¬Í¨¹ýMax_err_cnt¿ØÖÆ£¬Ä¬ÈÏÊÇ10´Î¡£Ã¿´Î¶ÁÈ¡Ê§°Ü»ò³¬Ê±£¬10´ÎµÄÊ±¼ä»¹ÊÇÍ¦³¤µÄ£¬ÖÁÉÙ2s¡£
+%V18.0711£¬ÐÞ¸ÄOpenº¯ÊýÎªtry catchÄ£Ê½£¬³¢ÊÔÈý´Îopen£¬´ò¿ªÊ§°Ü¸ÅÂÊ»ù±¾Ã»ÓÐ£¬Á¬ÐøÔËÐÐ7ÌìÒÔÉÏ¡£µ«ÆäËûº¯ÊýÃ»ÓÐ¸ù¾ÝOpenµÄ·µ»ØÖµ×ö¸ú½ø£¬ÓÐ°²È«Òþ»¼¡£
+
 classdef FTDAs <handle
-    %ä¸çŸ¥é“<handleæ˜¯ä»€ä¹ˆä½œç”¨ï¼Œæ¨¡æ¿é‡Œæ²¡æœ‰ã€‚
+    %²»ÖªµÀ<handleÊÇÊ²Ã´×÷ÓÃ£¬Ä£°åÀïÃ»ÓÐ¡£
     properties
-        ip; %è®¾å¤‡åœ°å€
-        dac_handle;%è®¾å¤‡æŒ‡é’ˆ
-        val_readout;
-        str;%ä¼ é€’å­—ç¬¦ä¸²
-        err_cnt=0;%é€šä¿¡é”™è¯¯è®°å½•
-        offset_zeroA=0;
+        ip; %Éè±¸µØÖ·
+        dac_handle;%Éè±¸Ö¸Õë
+        val_readout;  %¶Á³ö×Ö·û´®£¬ÖÐ¼ä±äÁ¿
+        str;%´«µÝ×Ö·û´®£¬ÖÐ¼ä±äÁ¿
+        err_cnt=0;%Í¨ÐÅ´íÎó¼ÇÂ¼
+        Max_err_cnt=10;
+        offset_zeroA=0; %ËÄ¸öÍ¨µÀµÄ0ÖµÆ«ÖÃ£¬ÐèÒª´ÓÊý¾Ý¿âÖÐ¶Á³ö£¬È»ºó³õÊ¼»¯Ê±¸üÐÂ£¬matlabÀïÄ¬ÈÏÎ»0£»
         offset_zeroB=0;
         offset_zeroC=0;
         offset_zeroD=0;
-        offset_zero=0;
+        offset_zero=0; %matlab´úÂëÖÐÀûÓÃµÄÖÐ¼ä±äÁ¿¡£
     end
-    methods (Access = protected)%ç§æœ‰å‡½æ•°ï¼Œæ‹’ç»å¤–éƒ¨è°ƒç”¨å¼€å…³è¿žæŽ¥ï¼Œå› ä¸ºdacè®¾å¤‡ä¸Šæ¯æ¬¡æŽ¥æ”¶å‘é€å®ŒæŒ‡ä»¤ä¼šä¸»åŠ¨å…³é—­è¿žæŽ¥ã€‚
-        function Open(obj)%è¶…æ—¶ä¼šå½»åº•æŠ¥é”™
-            fopen(obj.dac_handle);%å¦‚æžœè¶…æ—¶ä¼šå½»åº•æŠ¥é”™ï¼Œå¦‚ä½•è§£å†³ï¼Ÿmatlab fopenæ²¡æœ‰è¿”å›žå€¼ï¼Œæ— æ³•åˆ¤è¯»
+    methods (Access = protected)%Ë½ÓÐº¯Êý£¬¾Ü¾øÍâ²¿µ÷ÓÃ¿ª¹ØÁ¬½Ó£¬ÒòÎªdacÉè±¸ÉÏÃ¿´Î½ÓÊÕ·¢ËÍÍêÖ¸Áî»áÖ÷¶¯¹Ø±ÕÁ¬½Ó¡£
+      function result = Open(obj)%matlab´ò¿ª³¬Ê±»á³¹µ×±¨´í£¬ÆäËûÓïÑÔÐèÒªÐ¡ÐÄ
+          %Ä¿Ç°³¢ÊÔ£¬´ò¿ª³¬Ê±¶¼ÊÇÉè±¸¶Ë×´Ì¬²»ºÃ£¬Ö®Ç°µÄÖ¸ÁîÃ»Íê³É£¬µÈ´ýÒ»ÏÂ¾Í¿ÉÒÔÁË¡£ÕâÀïÏàµ±ÓÚ³¢ÊÔ3´Î´ò¿ª£¬Ä¿Ç°¼ûµ½¹ý´ò¿ªµÚ¶þ´Î¾Í³É¹¦£¬»¹Ã»µ½¹ý´ò¿ªµÚÈý´ÎµÄÊ±ºò¡£
+          %µ«ÊÇÒÀ¾ÉÓÐ·çÏÕ£¬Èç¹û¶¼´ò¿ªÊ§°Ü£¬ºó¼ÌµÄ³ÌÐò¾Í»á³ö´í£¬¶øºó¼Ì³ÌÐò»¹Ã»ÓÐÕë¶ÔopenµÄ·µ»ØÖµ×ö´¦Àí¡£
+            result = 0;
+            try
+               fopen(obj.dac_handle);%Èç¹û³¬Ê±»á³¹µ×±¨´í£¬ÈçºÎ½â¾ö£¿matlab fopenÃ»ÓÐ·µ»ØÖµ£¬ÎÞ·¨ÅÐ¶Á
+            catch 
+               warning('Open TCP/IP server failed!'); 
+            
+                try 
+                   pause(10);
+                   fopen(obj.dac_handle);%Èç¹û³¬Ê±»á³¹µ×±¨´í£¬ÈçºÎ½â¾ö£¿matlab fopenÃ»ÓÐ·µ»ØÖµ£¬ÎÞ·¨ÅÐ¶Á
+                catch 
+                   warning('Open TCP/IP server failed, again!'); 
+                   
+                   try 
+                       pause(20);
+                       fopen(obj.dac_handle);%Èç¹û³¬Ê±»á³¹µ×±¨´í£¬ÈçºÎ½â¾ö£¿matlab fopenÃ»ÓÐ·µ»ØÖµ£¬ÎÞ·¨ÅÐ¶Á
+                   catch 
+                       warning('Open TCP/IP server failed, 3rd times!'); 
+                       result = -1;
+                   end
+                end
+                
+            end
         end
         
-        function Close(obj)%æ²¡æ¯›ç—…
+        function Close(obj)%Ã»Ã«²¡
             fclose(obj.dac_handle);
         end   
     end
     
     methods
-        function obj = FTDAs(ip)%è¦ä¿®æ”¹è®¾ç½®çš„ç»“æŸç¬¦
-            obj.dac_handle = tcpip(ip, 5000);
-            set(obj.dac_handle,'Terminator','LF');%è®¾ç½®ç»“æŸç¬¦ï¼Œå½±å“æŸ¥è¯¢ç­‰å‘½ä»¤ï¼Œå¦‚æžœè®¾ç½®ä¸å¯¹ï¼Œå¯èƒ½å¯¼è‡´è¯»å–ç»“æžœè¶…æ—¶ï¼Œä½†ç›®å‰è®¾ç½®å•¥ç»“æŸç¬¦ä¹Ÿæ²¡æµ‹è¯•æˆåŠŸã€‚
+        function obj = FTDAs(ip)%ÒªÐÞ¸ÄÉèÖÃµÄ½áÊø·û
+            obj.dac_handle = tcpip(ip, 5000); %¶Ë¿Ú5000£¬Ä¿Ç°Îª¹Ì¶¨Öµ
+            set(obj.dac_handle,'Terminator','LF');%ÉèÖÃ½áÊø·û£¬Ó°Ïì²éÑ¯µÈÃüÁî£¬Èç¹ûÉèÖÃ²»¶Ô£¬¿ÉÄÜµ¼ÖÂ¶ÁÈ¡½á¹û³¬Ê±¡£
             obj.err_cnt =0;
+            obj.Max_err_cnt =10;
             obj.offset_zeroA=0;
             obj.offset_zeroB=0;
             obj.offset_zeroC=0;
@@ -53,7 +87,7 @@ classdef FTDAs <handle
             obj.offset_zero=0;
         end
         
-        function SetValue(obj,DA_id, Value)
+        function SetValue(obj,DA_id, Value) %ÓÃ»§Ê¹ÓÃÖ÷ÉèÖÃº¯Êý
             if (DA_id >= 1 && DA_id <=4 )
                 switch DA_id
                     case {1} 
@@ -66,10 +100,16 @@ classdef FTDAs <handle
                         obj.offset_zero = obj.offset_zeroD;
                 end
                 if (((Value + obj.offset_zero) >= -524288) && ((Value + obj.offset_zero)  <524288))
-                    while(writeval(obj,DA_id, Value + obj.offset_zero + 524288))%whileå¾ªçŽ¯ç¡®ä¿å†™æˆåŠŸï¼Œä½†æ˜¯ä¹Ÿæœ‰å¯èƒ½å› ä¸ºæ„å¤–å¹²æˆæ­»å¾ªçŽ¯ï¼Œå¯ä»¥è€ƒè™‘æœ€å¤šå°è¯•3æ¬¡ï¼Œå¦‚æžœéƒ½å¤±è´¥åˆ™æŠ¥é”™è¿”å›žã€‚
-                        fprintf('SetValule error occured, retrying...\n');
+                    obj.err_cnt = 0;
+                    while(writeval(obj,DA_id, Value + obj.offset_zero + 524288))%whileÑ­»·È·±£Ð´³É¹¦£¬µ«ÊÇÒ²ÓÐ¿ÉÄÜÒòÎªÒâÍâ¸É³ÉËÀÑ­»·£¬¿ÉÒÔ¿¼ÂÇ×î¶à³¢ÊÔ3´Î£¬Èç¹û¶¼Ê§°ÜÔò±¨´í·µ»Ø¡£
+                        if (obj.err_cnt >= obj.Max_err_cnt)
+                            fprintf('SetValue error occured to Maximum Setting(%d times), SetValue give up...\n',obj.Max_err_cnt);
+                            return;
+                        end
+                        fprintf('SetValue error occured, retrying...(DA_id=%d, Value = %d, retring %d times)\n',DA_id, Value, obj.err_cnt);
+                        pause(0.2);
                     end
-                    pause(0.2);
+                    
                 else
                     fprintf('Value must be in [-524288 - offset_zero,524287 - offset_zero]\n');
                 end
@@ -77,69 +117,19 @@ classdef FTDAs <handle
                     fprintf('DA_id should be 1,2,3,4.\n');
             end
         end 
-        
-        function result = ReadValue(obj,DA_id, DA_value)
-             if (DA_id >= 1 && DA_id <=4 )
-                obj.Open();
-                obj.str=sprintf('DA=%d;RW=0;ADDR=0x01;VAL=0x%05X',DA_id, DA_value-DA_value);
-                fprintf(obj.dac_handle, obj.str);
-                obj.str= fscanf(obj.dac_handle,'%s',7);
-                obj.Close();%å’ŒCPUä¸­çš„å…³é—­é…åˆæˆå¯¹å‡ºçŽ°
 
-                result =  sscanf(obj.str,'0x%05X'); %å°†obj.strçš„å­—ç¬¦ä¸²è½¬æ¢æˆæ•°å­—ï¼Œç›®å‰è¿”å›žå€¼æ˜¯ä¸ª24ä½16è¿›åˆ¶æ•°ï¼Œéœ€è¦å¤„ç†æŽ‰å‰4bitï¼Œä¹‹åŽä¼šä¿®æ”¹å›ºä»¶ï¼Œç›´æŽ¥è¿”å›ž20ä½åå…­è¿›åˆ¶æ•°ï¼ˆå¸¦0xï¼‰ã€‚
-                fprintf('Readback Value = %d in DEC (RealCode is 0x%05X in HEX);\n', result - obj.offset_zero -524288,result);%è°ƒè¯•ç”¨ï¼Œæ‰“å°ä¸€ä¸‹å›žè¯»å€¼
-             else
-                fprintf('DA_id should be 1,2,3,4.\n');    
-             end
-        end
-        
-        function send(obj, DA_id,  DA_addr, DA_value)%åŽŸå§‹ç›´å†™å‡½æ•°
+        function result = writeval(obj, DA_id, DA_value)%ÖÐ¼äº¯Êý£¬·þÎñÓÚSetValue£¬Ö»Ð´0x01µØÖ·µÄÖµ£¬²¢Íê³ÉÒ»´Î»Ø¶Á£¬½«»Ø¶ÁÖµÓÃÓÚÉÏ²ãÉèÖÃ½øÐÐ¶Ô±È¼ìÑé£¬ºÜÐ¡¸ÅÂÊ»áÐ´Ê§°Ü¡£
+            pause(0.2)
             obj.Open();
-            obj.str=sprintf('DA=%1d;RW=1;ADDR=0x%02X;VAL=0x%05X',DA_id, DA_addr, DA_value);
-            fprintf(obj.dac_handle, obj.str);
-            obj.Close();%å’ŒCPUä¸­çš„å…³é—­é…åˆæˆå¯¹å‡ºçŽ°
-        end
-        
-        function send_raw(obj, raw)%åŽŸå§‹ç›´å†™å‡½æ•°
+            obj.str=sprintf('DA=%d;RW=1;ADDR=0x01;VAL=0x%05X;',DA_id,DA_value);
+            fprintf(obj.dac_handle, obj.str);%Ð´Ò»´Î
+            obj.Close();%ºÍCPUÖÐµÄ¹Ø±ÕÅäºÏ³É¶Ô³öÏÖ
+            pause(0.2);
             obj.Open();
-            obj.str=raw;
-            fprintf(obj.dac_handle, obj.str);
-            obj.Close();%å’ŒCPUä¸­çš„å…³é—­é…åˆæˆå¯¹å‡ºçŽ°
-        end
-        
-        function result = fetch(obj, DA_id,  DA_addr, DA_value)%åŽŸå§‹è¯»å‡½æ•°
-            obj.Open();
-            obj.str=sprintf('DA=%1d;RW=0;ADDR=0x%02X;VAL=0x%05X',DA_id, DA_addr, DA_value);
-            fprintf(obj.dac_handle, obj.str);
-            obj.str = fscanf(obj.dac_handle,'%s',7);
-            obj.Close();%å’ŒCPUä¸­çš„å…³é—­é…åˆæˆå¯¹å‡ºçŽ°
-            
-            result =  sscanf(obj.str,'0x%05X'); %å°†obj.strçš„å­—ç¬¦ä¸²è½¬æ¢æˆæ•°å­—ï¼Œç›®å‰è¿”å›žå€¼æ˜¯ä¸ª24ä½16è¿›åˆ¶æ•°ï¼Œéœ€è¦å¤„ç†æŽ‰å‰4bitï¼Œä¹‹åŽä¼šä¿®æ”¹å›ºä»¶ï¼Œç›´æŽ¥è¿”å›ž20ä½åå…­è¿›åˆ¶æ•°ï¼ˆå¸¦0xï¼‰ã€‚
-            fprintf('Readback Value = 0x%05X;\n', result);%è°ƒè¯•ç”¨ï¼Œæ‰“å°ä¸€ä¸‹å›žè¯»å€¼
-        end
-        
-        function result = fetch_raw(obj, raw)%åŽŸå§‹è¯»å‡½æ•°
-            obj.Open();
-            obj.str=raw;
-            fprintf(obj.dac_handle, obj.str);
-            obj.str = fscanf(obj.dac_handle,'%s',7);
-            obj.Close();%å’ŒCPUä¸­çš„å…³é—­é…åˆæˆå¯¹å‡ºçŽ°
-            
-            result =  obj.str; 
-            fprintf('Readback Value = %5s;\n', result);%è°ƒè¯•ç”¨ï¼Œæ‰“å°ä¸€ä¸‹å›žè¯»å€¼
-        end
-        
-        function result = writeval(obj, DA_id, DA_value)%åªå†™0x01åœ°å€çš„å€¼ï¼Œå¹¶å®Œæˆä¸€æ¬¡å›žè¯»ï¼Œå°†å›žè¯»å€¼ç”¨äºŽä¸Šå±‚è®¾ç½®è¿›è¡Œå¯¹æ¯”æ£€éªŒï¼Œå¾ˆå°æ¦‚çŽ‡ä¼šå†™å¤±è´¥ã€‚
-            obj.Open();
-            obj.str=sprintf('DA=%d;RW=1;ADDR=0x01;VAL=0x%05X',DA_id,DA_value);
-            fprintf(obj.dac_handle, obj.str);%å†™ä¸€æ¬¡
-            obj.Close();%å’ŒCPUä¸­çš„å…³é—­é…åˆæˆå¯¹å‡ºçŽ°
-            
-            obj.Open();
-            obj.str=sprintf('DA=%d;RW=0;ADDR=0x01;VAL=0x%05X',DA_id,DA_value);
-            fprintf(obj.dac_handle, obj.str);%è¯»ä¸€æ¬¡
+            obj.str=sprintf('DA=%d;RW=0;ADDR=0x01;VAL=0x%05X;',DA_id,DA_value);
+            fprintf(obj.dac_handle, obj.str);%¶ÁÒ»´Î
             obj.val_readout= fscanf(obj.dac_handle,'%s',7);
-            obj.Close();%å’ŒCPUä¸­çš„å…³é—­é…åˆæˆå¯¹å‡ºçŽ°
+            obj.Close();%ºÍCPUÖÐµÄ¹Ø±ÕÅäºÏ³É¶Ô³öÏÖ
             
             obj.str = sprintf('0x%05X',DA_value);
             if (~isempty(obj.val_readout) && strcmp(obj.str, obj.val_readout))
@@ -151,18 +141,89 @@ classdef FTDAs <handle
             
         end
 
-       
-        
-        function fix(obj)
-            obj.str=sprintf('DA=%d;RW=0;ADDR=0x01;VAL=0x%05X',1,0);
+        function result = ReadValue(obj,DA_id) %ÓÃ»§Ê¹ÓÃÖ÷¶ÁÈ¡º¯Êý£¬DA_valueÃ»É¶ÒâÒå£¬µ«ÊÇ×î³õ³ÌÐò½Ó¿ÚÎªÕâÑù£¬Îª±ÜÃâÐÞ¸ÄÆäËûÖ´ÐÐ´úÂë£¬ÕâÀïÒ»Ö±Ã»É¾£¬ÐÂÐ´Èí¼þ¿ÉÒÔÉ¾³ý¡£
+%¶ÁÈ¡²Ù×÷ÊÇÒª×Ô¼ºÏÈ·¢ËÍÒ»¸ö¶ÁÈ¡ÇëÇó£¬DCÔ´ÏìÓ¦ºó·¢³öÏàÓ¦×Ö·û´®£¬ÉÏÎ»»ú³ÌÐòÒª¼°Ê±½ÓÊÕµ½¸Ã·µ»ØÖµ¡£
+            if (DA_id >= 1 && DA_id <=4 )
+                pause(0.2)
+                obj.Open();
+                obj.str=sprintf('DA=%d;RW=0;ADDR=0x01;VAL=0x00000;',DA_id);
+                fprintf(obj.dac_handle, obj.str);
+                obj.str= fscanf(obj.dac_handle,'%s',7); %ÉèÖÃ¶Á³ö³¤¶È£¬Ò²ÐíÊ±matlabµÄÌØÊâÐÔ£¬×¢Òâ±ð³¬Ê±¾ÍÐÐ¡£
+                obj.Close();%ºÍCPUÖÐµÄ¹Ø±ÕÅäºÏ³É¶Ô³öÏÖ
+
+                result =  sscanf(obj.str,'0x%05X'); %½«obj.strµÄ×Ö·û´®×ª»»³ÉÊý×Ö£¬Ä¿Ç°·µ»ØÖµÊÇ¸ö20Î»16½øÖÆÊý£¨´ø0x£©¡£
+                fprintf('Readback Value = %d in DEC (RealCode is 0x%05X in HEX);\n', result - obj.offset_zero -524288,result);%µ÷ÊÔÓÃ£¬´òÓ¡Ò»ÏÂ»Ø¶ÁÖµ
+             else
+                fprintf('DA_id should be 1,2,3,4.\n');    
+             end
+        end
+ 
+        function fix(obj) %¼°ÆäÌØÊâÇé¿ö£¬matlab openÁËÉè±¸£¬Éè±¸Ò²ÏìÓ¦ÁË£¬»¹Ã»À´µÃ¼°·¢ËÍÈÎºÎÖ¸Áî£¬¾Í±»ÓÃ»§ÖÐ¶Ï£¬ÕâÑù³ÌÐòÀï»áÌáÊ¾Éè±¸Ã»ÓÐ±»¹Ø±Õ¡£
+            %Ç¿ÐÐÐÞ¸Ä£¬·¢ËÍÒ²¸øÎÞÒâÒåÃüÁî£¬ÕâÀïÑ¡µÄ¶ÁÈ¡£¬È»ºó¹Ø±ÕÉè±¸¡£
+            obj.str=sprintf('DA=%d;RW=0;ADDR=0x01;VAL=0x%05X;',1,0);
             fprintf(obj.dac_handle, obj.str);
             obj.str= fscanf(obj.dac_handle,'%s',7);
-            obj.Close();%å’ŒCPUä¸­çš„å…³é—­é…åˆæˆå¯¹å‡ºçŽ°
+            obj.Close();%ºÍCPUÖÐµÄ¹Ø±ÕÅäºÏ³É¶Ô³öÏÖ
             
-            result =  sscanf(obj.str,'0x%05X'); %å°†obj.strçš„å­—ç¬¦ä¸²è½¬æ¢æˆæ•°å­—ï¼Œç›®å‰è¿”å›žå€¼æ˜¯ä¸ª24ä½16è¿›åˆ¶æ•°ï¼Œéœ€è¦å¤„ç†æŽ‰å‰4bitï¼Œä¹‹åŽä¼šä¿®æ”¹å›ºä»¶ï¼Œç›´æŽ¥è¿”å›ž20ä½åå…­è¿›åˆ¶æ•°ï¼ˆå¸¦0xï¼‰ã€‚
-            fprintf('Tring Fix reading ... 0x%05X;\n', result);%è°ƒè¯•ç”¨ï¼Œæ‰“å°ä¸€ä¸‹å›žè¯»å€¼
+            result =  sscanf(obj.str,'0x%05X'); %½«obj.strµÄ×Ö·û´®×ª»»³ÉÊý×Ö£¬Ä¿Ç°·µ»ØÖµÊÇ¸ö24Î»16½øÖÆÊý£¬ÐèÒª´¦ÀíµôÇ°4bit£¬Ö®ºó»áÐÞ¸Ä¹Ì¼þ£¬Ö±½Ó·µ»Ø20Î»Ê®Áù½øÖÆÊý£¨´ø0x£©¡£
+            fprintf('Tring Fix reading ... 0x%05X;\n', result);%µ÷ÊÔÓÃ£¬´òÓ¡Ò»ÏÂ»Ø¶ÁÖµ
+        end
+%%%%ÔÙÏÂÃæµÄº¯Êý²»Òª¿´£¬ºÍ»ù´¡Ê¹ÓÃÃ»ÓÐ¹ØÏµ¡£
+        function send(obj, DA_id,  DA_addr, DA_value) %Ô­Ê¼Ö±Ð´º¯Êý£¨Ö÷ÒªÊ¹ÓÃµ½ÁËADDR£©£¬Ð´²âÊÔ½Å±¾Ò²ÐíÄÜÓÃµ½£¬ÖÕ¶ËÓÃ»§²»ÐèÒªÊ¹ÓÃ¡£
+            obj.Open();
+            obj.str=sprintf('DA=%1d;RW=1;ADDR=0x%02X;VAL=0x%05X;',DA_id, DA_addr, DA_value);
+            fprintf(obj.dac_handle, obj.str);
+            obj.Close();%ºÍCPUÖÐµÄ¹Ø±ÕÅäºÏ³É¶Ô³öÏÖ
         end
         
+        function send_raw(obj, raw)%Ô­Ê¼Ö±Ð´º¯Êý£¬×îÍµÀÁµÄ£¬Íâ²¿Ö±½Ó´«ÈëÍêÕûÃüÁî×Ö·û´®¡£
+            obj.Open();
+            obj.str=raw;
+            fprintf(obj.dac_handle, obj.str);
+            obj.Close();%ºÍCPUÖÐµÄ¹Ø±ÕÅäºÏ³É¶Ô³öÏÖ
+        end
+        
+        function result = fetch(obj, DA_id,  DA_addr, DA_value)%Ô­Ê¼¶Áº¯Êý
+            obj.Open();
+            obj.str=sprintf('DA=%1d;RW=0;ADDR=0x%02X;VAL=0x%05X;',DA_id, DA_addr, DA_value);
+            fprintf(obj.dac_handle, obj.str);
+            obj.str = fscanf(obj.dac_handle,'%s',7); %ÕâÀïÐèÒª×¢Òâ³¤¶È£¬Ó²¼þ¶Ë·µ»Ø³¤¶È¹Ì¶¨¡£
+            obj.Close();%ºÍCPUÖÐµÄ¹Ø±ÕÅäºÏ³É¶Ô³öÏÖ
+            
+            result =  sscanf(obj.str,'0x%05X'); %½«obj.strµÄ×Ö·û´®×ª»»³ÉÊý×Ö£¬Ä¿Ç°·µ»ØÖµÊÇ¸ö24Î»16½øÖÆÊý£¬ÐèÒª´¦ÀíµôÇ°4bit£¬Ö®ºó»áÐÞ¸Ä¹Ì¼þ£¬Ö±½Ó·µ»Ø20Î»Ê®Áù½øÖÆÊý£¨´ø0x£©¡£
+            fprintf('Readback Value = 0x%05X;\n', result);%µ÷ÊÔÓÃ£¬´òÓ¡Ò»ÏÂ»Ø¶ÁÖµ
+        end
+        
+        function result = fetch_raw(obj, raw)%Ô­Ê¼¶Áº¯Êý£¬Âã´«¶ÁÈ¡ÃüÁî×Ö·û´®¡£
+            obj.Open();
+            obj.str=raw;
+            fprintf(obj.dac_handle, obj.str);
+            obj.str = fscanf(obj.dac_handle,'%s',7); %ÏÂÎ»»úËùÓÐ·µ»ØÖµ¶¼±»¹æ·¶Îª5¸öbyte¡£
+            obj.Close();%ºÍCPUÖÐµÄ¹Ø±ÕÅäºÏ³É¶Ô³öÏÖ
+            
+            result =  obj.str; 
+            fprintf('Readback Value = %5s;\n', result);%µ÷ÊÔÓÃ£¬´òÓ¡Ò»ÏÂ»Ø¶ÁÖµ£¬²»ÖªµÀÓÃ»§µÄÇëÇó£¬ËùÒÔÖ±½Ó·µ»ØÂã×Ö·û´®¡£
+        end
+        
+
+       
+        
+        
+        function result = ReadTM(obj,DA_id) %ÓÃ»§Ê¹ÓÃÖ÷¶ÁÈ¡º¯Êý£¬DA_valueÃ»É¶ÒâÒå£¬µ«ÊÇ×î³õ³ÌÐò½Ó¿ÚÎªÕâÑù£¬Îª±ÜÃâÐÞ¸ÄÆäËûÖ´ÐÐ´úÂë£¬ÕâÀïÒ»Ö±Ã»É¾£¬ÐÂÐ´Èí¼þ¿ÉÒÔÉ¾³ý¡£
+%¶ÁÈ¡²Ù×÷ÊÇÒª×Ô¼ºÏÈ·¢ËÍÒ»¸ö¶ÁÈ¡ÇëÇó£¬DCÔ´ÏìÓ¦ºó·¢³öÏàÓ¦×Ö·û´®£¬ÉÏÎ»»ú³ÌÐòÒª¼°Ê±½ÓÊÕµ½¸Ã·µ»ØÖµ¡£
+            if (DA_id >= 1 && DA_id <=5 )
+                pause(0.2)
+                obj.Open();
+                obj.str=sprintf('TM=%d;',DA_id);
+                fprintf(obj.dac_handle, obj.str);
+                obj.str= fscanf(obj.dac_handle,'%s',10); %ÉèÖÃ¶Á³ö³¤¶È£¬Ò²ÐíÊÇmatlabµÄÌØÊâÐÔ£¬×¢Òâ±ð³¬Ê±¾ÍÐÐ¡£
+                obj.Close();%ºÍCPUÖÐµÄ¹Ø±ÕÅäºÏ³É¶Ô³öÏÖ
+                result =  sscanf(obj.str,'%f'); %½«obj.strµÄ×Ö·û´®×ª»»³ÉÊý×Ö£¬Ä¿Ç°·µ»ØÖµÊÇ¸ö20Î»16½øÖÆÊý£¨´ø0x£©¡£
+                fprintf('Readback Value = %.2f & %s\n', result, obj.str);%µ÷ÊÔÓÃ£¬´òÓ¡Ò»ÏÂ»Ø¶ÁÖµ
+             else
+                fprintf('TM_id should be 1,2,3,4,5.\n');    
+             end
+        end
     end
 end
 
