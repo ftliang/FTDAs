@@ -1,5 +1,5 @@
 % author:F.Liang
-% data/version:18.0711
+% data/version:19.0129
 % filename:FTDAs.m
 % describe:梁福田定制款高精度DC源操作类，封装版，每次读写进行开关tcp连接。
 % 写给DC源的数据是最底层的基础数据，而用户输入的数据是物理层面的变量，两者需要在软件层进行转换。
@@ -16,7 +16,7 @@
 % dac = FTDAs(dac_ip); %初始化
 % 必要的函数内部参量赋值，尤其指offset，即0偏差，以后可能会有基准数据库读入该数据。
 % dac.SetValue(1,-524288);%Value must be in [-524288 - offset_zero,524287 - offset_zero)
-% dac.ReadValue(1,0); %如果用户忘记设置值，可以进行读出。如果不必要读出，上面的SetValue操作就完成了所有动作。
+% dac.ReadValue(1); %如果用户忘记设置值，可以进行读出。如果不必要读出，上面的SetValue操作就完成了所有动作。
 %不需要进行开关tcp连接，本代码内部自行维护，设备端cpu内设计为完成一次数据接收后主动关闭tcp链接，软件也需要配合关闭链接。使用时注意保证tcp链接的快速开关，成对出现，但也要注意开关的频率/时间间隔，测试时出现过关闭后立刻打开，时间小于0.2s时，设备端响应失败。
 %原则上多设备操作也不冲突(要小心)，设置值以最后一次为准。
 %更新说明：
@@ -25,7 +25,8 @@
 %V18.0613，辅助性代码，设置出错时汇报出错设置值。修改了ReadValue输入参数
 %V18.0627,修改出错重读尝试次数限制，通过Max_err_cnt控制，默认是10次。每次读取失败或超时，10次的时间还是挺长的，至少2s。
 %V18.0711，修改Open函数为try catch模式，尝试三次open，打开失败概率基本没有，连续运行7天以上。但其他函数没有根据Open的返回值做跟进，有安全隐患。
-
+%V19.0124，完善报警输出内容,明确显示出错ip，设置和读取的内容对照。%没有在样品上实际跑过，不确定出错时是否输出会有意外。修改内容仅限于报错部分提示IP内容，可以搜索IP找到本次全部修改。
+%V19.0129, 添加ReadSN，ReadTS，按照端口和SN读取相应温度计的温度。需要配合硬件固件V19.0129，硬件版本W7500P IO 1.1，
 classdef FTDAs <handle
     %不知道<handle是什么作用，模板里没有。
     properties
@@ -49,19 +50,19 @@ classdef FTDAs <handle
             try
                fopen(obj.dac_handle);%如果超时会彻底报错，如何解决？matlab fopen没有返回值，无法判读
             catch 
-               warning('Open TCP/IP server failed!'); 
+               warning('Open TCP/IP server failed! IP=%s', obj.ip); 
             
                 try 
                    pause(10);
                    fopen(obj.dac_handle);%如果超时会彻底报错，如何解决？matlab fopen没有返回值，无法判读
                 catch 
-                   warning('Open TCP/IP server failed, again!'); 
+                   warning('Open TCP/IP server failed, again!IP=%s', obj.ip); 
                    
                    try 
                        pause(20);
                        fopen(obj.dac_handle);%如果超时会彻底报错，如何解决？matlab fopen没有返回值，无法判读
                    catch 
-                       warning('Open TCP/IP server failed, 3rd times!'); 
+                       warning('Open TCP/IP server failed, 3rd times!IP=%s', obj.ip); 
                        result = -1;
                    end
                 end
@@ -85,6 +86,7 @@ classdef FTDAs <handle
             obj.offset_zeroC=0;
             obj.offset_zeroD=0;
             obj.offset_zero=0;
+            obj.ip=ip;
         end
         
         function SetValue(obj,DA_id, Value) %用户使用主设置函数
@@ -102,11 +104,11 @@ classdef FTDAs <handle
                 if (((Value + obj.offset_zero) >= -524288) && ((Value + obj.offset_zero)  <524288))
                     obj.err_cnt = 0;
                     while(writeval(obj,DA_id, Value + obj.offset_zero + 524288))%while循环确保写成功，但是也有可能因为意外干成死循环，可以考虑最多尝试3次，如果都失败则报错返回。
-                        if (obj.err_cnt >= obj.Max_err_cnt)
-                            fprintf('SetValue error occured to Maximum Setting(%d times), SetValue give up...\n',obj.Max_err_cnt);
+                        if (obj.err_cnt > obj.Max_err_cnt)
+                            fprintf('IP=%s, SetValue error occured to Maximum Setting(%d times), SetValue give up...\n',obj.ip, obj.Max_err_cnt);
                             return;
                         end
-                        fprintf('SetValue error occured, retrying...(DA_id=%d, Value = %d, retring %d times)\n',DA_id, Value, obj.err_cnt);
+                        fprintf('IP=%s, SetValue error occured, retrying...(retring %d times)\n',obj.ip, obj.err_cnt);
                         pause(0.2);
                     end
                     
@@ -136,6 +138,7 @@ classdef FTDAs <handle
                 result=0;
             else
                 result=1;
+                fprintf('IP=%s, DA_id=%d, SetValue = %d, ReadBack = %d\n',obj.ip, DA_id, Value, obj.val_readout);
                 obj.err_cnt = obj.err_cnt+1;
             end
             
@@ -219,11 +222,41 @@ classdef FTDAs <handle
                 obj.str= fscanf(obj.dac_handle,'%s',10); %设置读出长度，也许是matlab的特殊性，注意别超时就行。
                 obj.Close();%和CPU中的关闭配合成对出现
                 result =  sscanf(obj.str,'%f'); %将obj.str的字符串转换成数字，目前返回值是个20位16进制数（带0x）。
-                fprintf('Readback Value = %.2f & %s\n', result, obj.str);%调试用，打印一下回读值
+                fprintf('Readback Value = %.4f & %s\n', result, obj.str);%调试用，打印一下回读值
              else
                 fprintf('TM_id should be 1,2,3,4,5.\n');    
              end
         end
+        
+        function result = ReadSN(obj) %用户使用主读取函数，DA_value没啥意义，但是最初程序接口为这样，为避免修改其他执行代码，这里一直没删，新写软件可以删除。
+%读取操作是要自己先发送一个读取请求，DC源响应后发出相应字符串，上位机程序要及时接收到该返回值。
+                pause(0.2)
+                obj.Open();
+                obj.str=sprintf('SN;');
+                fprintf(obj.dac_handle, obj.str);
+                obj.str= fscanf(obj.dac_handle,'%s',20); %设置读出长度，也许是matlab的特殊性，注意别超时就行。
+                obj.Close();%和CPU中的关闭配合成对出现
+                result =  obj.str; %将obj.str的字符串转换成数字，目前返回值是个20位16进制数（带0x）。
+                fprintf('Readback Value = %s & %s\n', result, obj.str);%调试用，打印一下回读值
+
+        end   
+        
+
+        function result = ReadTS(obj,DA_id, DA_SN) %用户使用主读取函数，DA_value没啥意义，但是最初程序接口为这样，为避免修改其他执行代码，这里一直没删，新写软件可以删除。
+%读取操作是要自己先发送一个读取请求，DC源响应后发出相应字符串，上位机程序要及时接收到该返回值。
+
+                pause(0.2)
+                obj.Open();
+                obj.str=sprintf('TS=%d;SN=%s;',DA_id, DA_SN);
+                fprintf(obj.str);
+                fprintf(obj.dac_handle, obj.str);
+                obj.str= fscanf(obj.dac_handle,'%s',20); %设置读出长度，也许是matlab的特殊性，注意别超时就行。
+                obj.Close();%和CPU中的关闭配合成对出现
+                result =  sscanf(obj.str,'%f'); %将obj.str的字符串转换成数字，目前返回值是个20位16进制数（带0x）。
+                fprintf('Readback Value = %.4f & %s\n', result, obj.str);%调试用，打印一下回读值
+
+        end
+        
     end
 end
 
